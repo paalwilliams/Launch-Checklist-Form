@@ -52,7 +52,7 @@ window.onload = (event) => {
       alert('Please enter a number value for fuel level');
     } else if (cargoMass.value == '') {
       alert('Please enter a cargo mass.');
-    } else if (isNaN(fuelLevel.value)) {
+    } else if (isNaN(cargoMass.value)) {
       alert('Please enter a number value for cargo mass');
     } else {
       pilotStatus.innerHTML = `Pilot ${pilotName.value} is ready for launch`;
