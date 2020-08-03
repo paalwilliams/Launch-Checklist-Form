@@ -87,7 +87,6 @@ window.onload = (event) => {
             cargoStatus.innerHTML = 'No cargo mass provided';
             isReady = false;
           } else if (Number(x.value) > 10000) {
-            console.log('cargo high');
             cargoStatus.innerHTML = 'Cargo too high for launch';
             isReady = false;
           } else {
