@@ -42,44 +42,73 @@ window.onload = (event) => {
 
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
-    if (pilotName.value == '') {
-      alert('Please enter a pilot name');
-    } else if (coPilotName.value == '') {
-      alert('Please enter a co-pilot name');
-    } else if (fuelLevel.value == '') {
-      alert('Please enter a fuel level');
-    } else if (isNaN(fuelLevel.value)) {
-      alert('Please enter a number value for fuel level');
-    } else if (cargoMass.value == '') {
-      alert('Please enter a cargo mass.');
-    } else if (isNaN(cargoMass.value)) {
-      alert('Please enter a number value for cargo mass');
-    } else {
-      pilotStatus.innerHTML = `Pilot ${pilotName.value} is ready for launch`;
-      copilotStatus.innerHTML = `Co-pilot ${coPilotName.value} is ready for launch`;
-      if (Number(fuelLevel.value) < 10000) {
-        launchStatus.style.color = 'red';
-        launchStatus.innerHTML = 'Shuttle not ready for launch';
-        faultyItems.style.visibility = 'visible';
-        fuelStatus.innerHTML = `Fuel level is too low to complete journey.`;
+    let inputArr = document.getElementsByTagName('input');
+    inputArr = Array.from(inputArr);
+    faultyItems.style.visibility = 'visible';
+    let isReady = false;
+    inputArr.forEach((x) => {
+      isReady = false;
+      switch (x.id) {
+        case 'pilotName':
+          if (x.value == '') {
+            alert('Please enter a pilot name.');
+            pilotStatus.innerHTML = 'Pilot not ready.';
+          } else {
+            pilotStatus.innerHTML = `Pilot ${pilotName.value} is ready for launch.`;
+            isReady = true;
+          }
+          break;
+        case 'coPilotName':
+          if (x.value == '') {
+            alert('Please enter a co pilot name.');
+            copilotStatus.innerHTML = 'Co-pilot not ready';
+            isReady = false;
+          } else {
+            copilotStatus.innerHTML = `Pilot ${coPilotName.value} is ready for launch.`;
+            isReady = true;
+          }
+          break;
+        case 'fuelLevel':
+          if (x.value == '' || isNaN(x.value)) {
+            alert('Please enter a valid number for fuel level');
+            fuelStatus.innerHTML = 'No fuel level provided.';
+            isReady = false;
+          } else if (Number(x.value) < 10000) {
+            fuelStatus.innerHTML = 'Fuel too low for launch';
+            isReady = false;
+          } else {
+            fuelStatus.innerHTML = 'Fuel level high enough for launch';
+            isReady = true;
+          }
+          break;
+        case 'cargoMass':
+          if (x.value == '' || isNaN(x.value)) {
+            alert('Please enter a valid number for cargo Mass.');
+            cargoStatus.innerHTML = 'No cargo mass provided';
+            isReady = false;
+          } else if (Number(x.value) > 10000) {
+            console.log('cargo high');
+            cargoStatus.innerHTML = 'Cargo too high for launch';
+            isReady = false;
+          } else {
+            cargoStatus.innerHTML = 'Cargo mass low enough for launch';
+            isReady = true;
+          }
+          break;
       }
-      if (Number(cargoMass.value) > 10000) {
-        launchStatus.style.color = 'red';
-        launchStatus.innerHTML = 'Shuttle not ready for launch';
-        faultyItems.style.visibility = 'visible';
-        cargoStatus.innerHTML = `Cargo mass too high for launch.`;
-      }
+    });
 
-      if (Number(cargoMass.value < 1000) && Number(fuelLevel.value) > 10000) {
-        launchStatus.style.color = 'green';
-        launchStatus.innerHTML = 'Shuttle ready for launch';
-        faultyItems.style.visibility = 'visible';
-        cargoStatus.innerHTML = `Cargo mass low enough for launch.`;
-        fuelStatus.innerHTML = `Fuel level high enough for launch`;
-      }
+    if (
+      pilotName.value !== '' &&
+      coPilotName.value !== '' &&
+      Number(fuelLevel.value) > 10000 &&
+      Number(cargoMass.value) < 10000
+    ) {
+      launchStatus.innerHTML = 'Shuttle Ready for Launch';
+      launchStatus.style.color = 'green';
+    } else {
+      launchStatus.innerHTML = 'Shuttle Not Ready for Launch';
+      launchStatus.style.color = 'red';
     }
   });
 };
-
-// Your info box does not populate with the information on the shuttle if everything passes
-// The fetch does not populate until the submit button is hit
